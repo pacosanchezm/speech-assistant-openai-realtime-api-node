@@ -55,9 +55,9 @@ fastify.all("/incoming-call", async (request, reply) => {
 
   const twimlResponse = `<?xml version="1.0" encoding="UTF-8"?>
                           <Response>
-                              <Say>Por favor espere un momento</Say>
+                              <Say></Say>
                               <Pause length="1"/>
-                              <Say>Puede comenzar</Say>
+                              <Say></Say>
                               <Connect>
                                   <Stream url="wss://${request.headers.host}/media-stream" />
                               </Connect>
@@ -79,7 +79,7 @@ fastify.register(async (fastify) => {
     let responseStartTimestampTwilio = null;
 
     const openAiWs = new WebSocket(
-      "wss://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview-2024-10-01",
+      "wss://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview-2024-12-17",
       {
         headers: {
           Authorization: `Bearer ${OPENAI_API_KEY}`,
