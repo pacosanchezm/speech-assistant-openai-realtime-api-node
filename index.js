@@ -43,6 +43,8 @@ const SHOW_TIMING_MATH = false;
 
 // Root Route
 fastify.get("/", async (request, reply) => {
+  console.log("✅ Recibí una solicitud GET /");
+
   reply.send({ message: "Twilio Media Stream Server is running!" });
 });
 
