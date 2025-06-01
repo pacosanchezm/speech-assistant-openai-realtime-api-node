@@ -100,6 +100,22 @@ fastify.register(async (fastify) => {
           instructions: SYSTEM_MESSAGE,
           modalities: ["text", "audio"],
           temperature: 0.8,
+          tools: [
+            {
+              name: "consulta_entry",
+              description: "Obtiene la información de entradas de pagina",
+              parameters: {
+                type: "object",
+                properties: {
+                  id: {
+                    type: "integer",
+                    description: "el id de la entrada a consultar",
+                  },
+                },
+                required: ["id"],
+              },
+            },
+          ],
         },
       };
 
@@ -193,7 +209,7 @@ fastify.register(async (fastify) => {
     });
 
     // Listen for messages from the OpenAI WebSocket (and send to Twilio if necessary)
-    openAiWs.on("message", (data) => {
+    openAiWs.on("message", async (data) => {
       try {
         const response = JSON.parse(data);
 
@@ -227,6 +243,43 @@ fastify.register(async (fastify) => {
 
         if (response.type === "input_audio_buffer.speech_started") {
           handleSpeechStartedEvent();
+        }
+
+        // Manejar llamadas a tools
+        if (response.type === "tool_call") {
+          const toolName = response.tool.name;
+          const args = response.tool.parameters;
+          const toolCallId = response.tool_call_id;
+
+          console.log("🔧 Tool request:", toolName, args);
+
+          if (toolName === "consulta_entry") {
+            try {
+              const resultado = await consulta_entry_at(args);
+
+              const toolResponse = {
+                type: "tool_response",
+                tool_response: {
+                  tool_call_id: toolCallId,
+                  output: resultado,
+                },
+              };
+
+              openAiWs.send(JSON.stringify(toolResponse));
+              console.log("✅ Tool response enviada:", resultado);
+            } catch (err) {
+              console.error("❌ Error ejecutando consulta_entry:", err);
+              openAiWs.send(
+                JSON.stringify({
+                  type: "tool_response",
+                  tool_response: {
+                    tool_call_id: toolCallId,
+                    output: { error: "Error al consultar la entrada" },
+                  },
+                })
+              );
+            }
+          }
         }
       } catch (error) {
         console.error(
