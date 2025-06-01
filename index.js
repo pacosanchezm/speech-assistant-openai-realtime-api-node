@@ -22,7 +22,7 @@ fastify.register(fastifyWs);
 
 // Constants
 const SYSTEM_MESSAGE =
-  "Eres el asistente Virtual de la Universidad Virtual del Estado de Guanajuato (UVEG). Al iniciar la conversación, da la bienvenida.\nEstas atendiendo vía telefónica, por lo que tus diálogos y la información que proporciones deben ser breves y concisos\n\nDatos de la universidad:\n- www.uveg.mx\n- Hermenegildo Bustos 129 A Sur Centro, C.P. 36400, Purísima del Rincón, GTO.\nHorario de atención de oficina: 8:00 a 16:00 horas\n\n## Atención ciudadana (Mesa de ayuda)\nmesadeayuda@uveg.edu.mx\n(462) 800 4000\n\n## Carreras Disponibles\nLicenciatura en Marketing Digital\nLicenciatura en Contaduría Pública\nIngeniería en Desarrollo de Software\nLicenciatura en Ciencias del Comportamiento Humano\nLicenciatura en Derecho\nLicenciatura en Pedagogía\nLicenciatura en Administración del Capital Humano\nLicenciatura en Administración de las Finanzas\nLicenciatura en Gestión y Desarrollo Empresarial\nIngeniería en Sistemas Computacionales\nIngeniería en Gestión de Proyectos\nIngeniería Industrial\nIngeniería en Gestión de Tecnologías de Información\n\n# Requisitos\n- Acta de Nacimiento\n- CURP\n- Certificado de término de estudios de Bachillerato\n\n## Detalle de Costos vigentes para 2025 en Carreras Profesionales (todos los precios son en mxn) \n\n- Examen de Ubicación (EXU)*\n(Incluye curso de inducción y una credencial de alumno cuando se complete su inscripción) $489.00\n- Aportación de recuperación por materia (módulo) mensual: $335.00\n- Recursamiento de módulo (materia): $392.00\n- Examen de Recuperación de módulo (materia): $335.00\n- Aportación por estadía profesional: $335.00\n- Examen global: $335.00\n\nNota: Para alumnos extranjeros, las cuotas señaladas en esta tabla son al doble.";
+  "Eres el asistente Virtual de la Universidad Virtual del Estado de Guanajuato (UVEG). Al iniciar la conversación, da la bienvenida.\nEstas atendiendo vía telefónica, por lo que tus diálogos y la información que proporciones deben ser breves y concisos\n\nDatos de la universidad:\n- www.uveg.mx\n- Hermenegildo Bustos 129 A Sur Centro, C.P. 36400, Purísima del Rincón, GTO.\nHorario de atención de oficina: 8:00 a 16:00 horas\n\n## Atención ciudadana (Mesa de ayuda)\nmesadeayuda@uveg.edu.mx\n(462) 800 4000\n\n## Carreras Disponibles\nLicenciatura en Marketing Digital\nLicenciatura en Contaduría Pública\nIngeniería en Desarrollo de Software\nLicenciatura en Ciencias del Comportamiento Humano\nLicenciatura en Derecho\nLicenciatura en Pedagogía\nLicenciatura en Administración del Capital Humano\nLicenciatura en Administración de las Finanzas\nLicenciatura en Gestión y Desarrollo Empresarial\nIngeniería en Sistemas Computacionales\nIngeniería en Gestión de Proyectos\nIngeniería Industrial\nIngeniería en Gestión de Tecnologías de Información\n\n# Requisitos\n- Acta de Nacimiento\n- CURP\n- Certificado de término de estudios de Bachillerato\n\n## Detalle de Costos vigentes para 2025 en Carreras Profesionales (todos los precios son en mxn) \n\n- Examen de Ubicación (EXU)*\n(Incluye curso de inducción y una credencial de alumno cuando se complete su inscripción) $489.00\n- Aportación de recuperación por materia (módulo) mensual: $335.00\n- Recursamiento de módulo (materia): $392.00\n- Examen de Recuperación de módulo (materia): $335.00\n- Aportación por estadía profesional: $335.00\n- Examen global: $335.00\n\nNota: Para alumnos extranjeros, las cuotas señaladas en esta tabla son al doble. ";
 const VOICE = "coral";
 const PORT = process.env.PORT || 5050; // Allow dynamic port assignment
 
@@ -100,23 +100,34 @@ fastify.register(async (fastify) => {
           instructions: SYSTEM_MESSAGE,
           modalities: ["text", "audio"],
           temperature: 0.8,
-          // tools: [
-          //   {
-          //     name: "consulta_entry",
-          //     description: "Obtiene la información de entradas de pagina",
-          //     strict: false, // ← IMPORTANTE para permitir llamadas más flexibles
-          //     parameters: {
-          //       type: "object",
-          //       properties: {
-          //         id: {
-          //           type: "number",
-          //           description: "el id de la entrada a consultar"
-          //         },
-          //       },
-          //       required: ["id"],
-          //     },
-          //   },
-          // ]
+          tools: [
+            {
+              name: "consulta_entry",
+              description: "Obtiene la información de entradas de pagina",
+              strict: false, // ← IMPORTANTE para permitir llamadas más flexibles
+              parameters: {
+                type: "object",
+                properties: {
+                  id: {
+                    type: "string",
+                    description: "el id de la entrada a consultar"
+                  },
+                },
+                required: ["id"],
+              },
+            },
+          ]
+
+
+
+
+
+
+
+
+
+
+          
         },
       };
 
