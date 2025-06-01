@@ -100,25 +100,39 @@ fastify.register(async (fastify) => {
           instructions: SYSTEM_MESSAGE,
           modalities: ["text", "audio"],
           temperature: 0.8,
-          tools: [
+          // tools: [
+          //   {
+          //     name: "consulta_entry",
+          //     description: "Obtiene la información de entradas de pagina",
+          //     strict: false, // ← IMPORTANTE para permitir llamadas más flexibles
+          //     parameters: {
+          //       type: "object",
+          //       properties: {
+          //         id: {
+          //           type: "string",
+          //           description: "el id de la entrada a consultar"
+          //         },
+          //       },
+          //       required: ["id"],
+          //     },
+          //   },
+          // ]
+
+          tools:[
             {
-              name: "consulta_entry",
-              description: "Obtiene la información de entradas de pagina",
-              strict: false, // ← IMPORTANTE para permitir llamadas más flexibles
-              parameters: {
-                type: "object",
-                properties: {
-                  id: {
-                    type: "string",
-                    description: "el id de la entrada a consultar"
-                  },
+                "name": "get_weather",
+                "type": "function",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {"type": "string"},
+                        "unit": {"type": "string", "enum": ["c", "f"]},
+                    },
+                    "required": ["location", "unit"],
+                    "additionalProperties": False,
                 },
-                required: ["id"],
-              },
-            },
+            }
           ]
-
-
 
 
 
