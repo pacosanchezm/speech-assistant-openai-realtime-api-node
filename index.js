@@ -104,7 +104,7 @@ fastify.register(async (fastify) => {
             {
               name: "consulta_entry",
               description: "Obtiene la información de entradas de pagina",
-              strict: false, // ← IMPORTANTE para permitir llamadas más flexibles
+             // strict: false, // ← IMPORTANTE para permitir llamadas más flexibles
               parameters: {
                 type: "object",
                 properties: {
@@ -124,7 +124,7 @@ fastify.register(async (fastify) => {
       openAiWs.send(JSON.stringify(sessionUpdate));
 
       // Uncomment the following line to have AI speak first:
-      sendInitialConversationItem();
+     // sendInitialConversationItem();
     };
 
     // Send initial conversation item if AI talks first
