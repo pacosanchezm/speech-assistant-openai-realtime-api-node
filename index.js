@@ -215,6 +215,42 @@ fastify.register(async (fastify) => {
       try {
         const response = JSON.parse(data);
 
+
+        if (response.type === "tool_call") {
+          const { name, parameters } = response.tool;
+          const toolCallId = response.tool_call_id;
+      
+          if (name === "consulta_entry") {
+           // const result = await consulta_entry_at(parameters);
+            const result = "entrada correcta";
+      
+            // Enviar respuesta de tool
+            openAiWs.send(JSON.stringify({
+              type: "tool_response",
+              tool_response: {
+                tool_call_id: toolCallId,
+                output: result
+              }
+            }));
+      
+            // Hacer que la IA continúe hablando
+            openAiWs.send(JSON.stringify({ type: "response.create" }));
+          }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if (LOG_EVENT_TYPES.includes(response.type)) {
           console.log(`Received event: ${response.type}`, response);
         }
@@ -246,6 +282,15 @@ fastify.register(async (fastify) => {
         if (response.type === "input_audio_buffer.speech_started") {
           handleSpeechStartedEvent();
         }
+
+
+
+
+
+
+
+
+
 
         // // Manejar llamadas a tools
         // if (response.type === "tool_call") {
