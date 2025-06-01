@@ -100,22 +100,22 @@ fastify.register(async (fastify) => {
           instructions: SYSTEM_MESSAGE,
           modalities: ["text", "audio"],
           temperature: 0.8,
-          // tools: [
-          //   {
-          //     name: "consulta_entry",
-          //     description: "Obtiene la información de entradas de pagina",
-          //     parameters: {
-          //       type: "object",
-          //       properties: {
-          //         id: {
-          //           type: "integer",
-          //           description: "el id de la entrada a consultar",
-          //         },
-          //       },
-          //       required: ["id"],
-          //     },
-          //   },
-          // ],
+          tools: [
+            {
+              name: "consulta_entry",
+              description: "Obtiene la información de entradas de pagina",
+              parameters: {
+                type: "object",
+                properties: {
+                  id: {
+                    type: "integer",
+                    description: "el id de la entrada a consultar",
+                  },
+                },
+                required: ["id"],
+              },
+            },
+          ],
         },
       };
 
