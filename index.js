@@ -219,25 +219,68 @@ fastify.register(async (fastify) => {
         if (response.type === "tool_call") {
           const { name, parameters } = response.tool;
           const toolCallId = response.tool_call_id;
-      
+        
           if (name === "consulta_entry") {
-           // const result = await consulta_entry_at(parameters);
-            const result = "entrada correcta";
-      
-            // Enviar respuesta de tool
-            openAiWs.send(JSON.stringify({
-              type: "tool_response",
-              tool_response: {
-                tool_call_id: toolCallId,
-                output: result
-              }
-            }));
-      
-            // Hacer que la IA continúe hablando
-            openAiWs.send(JSON.stringify({ type: "response.create" }));
+            try {
+              const result = await consulta_entry_at(parameters); // Devuelve un string, por ejemplo
+              const outputText = typeof result === "string" ? result : JSON.stringify(result);
+        
+              // 1. Enviar tool_response
+              openAiWs.send(JSON.stringify({
+                type: "tool_response",
+                tool_response: {
+                  tool_call_id: toolCallId,
+                  output: result
+                }
+              }));
+        
+              // 2. Crear mensaje del asistente con contenido textual basado en resultado de la tool
+              openAiWs.send(JSON.stringify({
+                type: "conversation.item.create",
+                item: {
+                  type: "message",
+                  role: "assistant",
+                  content: [
+                    {
+                      type: "text",
+                      text: outputText
+                    }
+                  ]
+                }
+              }));
+        
+              // 3. Luego sí: response.create para iniciar la respuesta hablada
+              openAiWs.send(JSON.stringify({ type: "response.create" }));
+            } catch (err) {
+              console.error("Error ejecutando consulta_entry:", err);
+        
+              openAiWs.send(JSON.stringify({
+                type: "tool_response",
+                tool_response: {
+                  tool_call_id: toolCallId,
+                  output: { error: "Error al consultar la entrada" }
+                }
+              }));
+        
+              // También puedes notificar error de forma hablada
+              openAiWs.send(JSON.stringify({
+                type: "conversation.item.create",
+                item: {
+                  type: "message",
+                  role: "assistant",
+                  content: [
+                    {
+                      type: "text",
+                      text: "Hubo un problema al consultar la información solicitada."
+                    }
+                  ]
+                }
+              }));
+        
+              openAiWs.send(JSON.stringify({ type: "response.create" }));
+            }
           }
         }
-
 
 
 
