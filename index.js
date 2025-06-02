@@ -140,6 +140,7 @@ fastify.register(async (fastify) => {
               name: "consulta_entry",
               type: "function",
               description: "Obtiene la información de entradas de pagina",
+              strict: false,
               parameters: {
                 type: "object",
                 properties: {
@@ -248,6 +249,26 @@ fastify.register(async (fastify) => {
     openAiWs.on("open", () => {
       console.log("Connected to the OpenAI Realtime API");
       setTimeout(initializeSession, 100);
+
+
+      setTimeout(() => {
+        openAiWs.send(JSON.stringify({
+          type: "conversation.item.create",
+          item: {
+            type: "message",
+            role: "user",
+            content: [
+              { type: "text", text: "Consulta la entrada 123" }
+            ]
+          }
+        }));
+        openAiWs.send(JSON.stringify({ type: "response.create" }));
+      }, 300);
+
+
+
+
+
     });
 
     // Listen for messages from the OpenAI WebSocket (and send to Twilio if necessary)
@@ -328,6 +349,8 @@ fastify.register(async (fastify) => {
 
 
         if (response.type === "tool_call") {
+          console.log("🟢 tool_call recibida:", response);
+
           const { name, parameters } = response.tool;
           const toolCallId = response.tool_call_id;
           if (name === "consulta_entry") {
