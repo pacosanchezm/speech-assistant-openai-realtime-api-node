@@ -272,7 +272,7 @@ fastify.register(async (fastify) => {
             type: "message",
             role: "user",
             content: [
-              { type: "input_text", text: "Consulta la entrada 123" }
+              { type: "input_text", text: "Llama a la función consulta_entry con id 123." }
             ]
           }
         }));
