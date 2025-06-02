@@ -166,7 +166,7 @@ fastify.register(async (fastify) => {
       openAiWs.send(JSON.stringify(sessionUpdate));
 
       // Uncomment the following line to have AI speak first:
-      sendInitialConversationItem();
+    //  sendInitialConversationItem();
     };
 
     // Send initial conversation item if AI talks first
@@ -258,7 +258,7 @@ fastify.register(async (fastify) => {
             type: "message",
             role: "user",
             content: [
-              { type: "text", text: "Consulta la entrada 123" }
+              { type: "input_text", text: "Consulta la entrada 123" }
             ]
           }
         }));
