@@ -333,7 +333,7 @@ fastify.register(async (fastify) => {
           if (name === "consulta_entry") {
             try {
               // Simulación: puedes poner await consulta_entry_at(parameters);
-              const result = `La entrada ${parameters.id} es Inscripción 2025.`; 
+              const result = `La entrada ${parameters.id} es referente a las becas deportivas`; 
         
               openAiWs.send(JSON.stringify({
                 type: "tool_response",
