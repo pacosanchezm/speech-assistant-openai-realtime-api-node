@@ -118,24 +118,39 @@ fastify.register(async (fastify) => {
           //   },
           // ]
 
+          // tools: [
+          //   {
+          //     "name": "get_weather",
+          //     // "type": "function", // opcional
+          //     "parameters": {
+          //       "type": "object",
+          //       "properties": {
+          //         "location": { "type": "string" },
+          //         "unit": { "type": "string", "enum": ["c", "f"] }
+          //       },
+          //       "required": ["location", "unit"],
+          //       "additionalProperties": false
+          //     }
+          //   }
+          // ]
+
+
           tools: [
             {
-              "name": "get_weather",
-              // "type": "function", // opcional
+              name: "consulta_entry",
+              description: "Obtiene la información de entradas de pagina",
               "parameters": {
                 "type": "object",
-                "properties": {
-                  "location": { "type": "string" },
-                  "unit": { "type": "string", "enum": ["c", "f"] }
-                },
-                "required": ["location", "unit"],
+                  id: {
+                    type: "string",
+                    description: "el id de la entrada a consultar"
+                  },
+                
+                required: ["id"],
                 "additionalProperties": false
               }
             }
           ]
-
-
-
 
 
 
@@ -308,6 +323,54 @@ fastify.register(async (fastify) => {
         //     }
         //   }
         // }
+
+
+
+        if (response.type === "tool_call") {
+          const { name, parameters } = response.tool;
+          const toolCallId = response.tool_call_id;
+          if (name === "consulta_entry") {
+            try {
+              // Simulación: puedes poner await consulta_entry_at(parameters);
+              const result = `La entrada ${parameters.id} es Inscripción 2025.`; 
+        
+              openAiWs.send(JSON.stringify({
+                type: "tool_response",
+                tool_response: {
+                  tool_call_id: toolCallId,
+                  output: result
+                }
+              }));
+        
+              openAiWs.send(JSON.stringify({ type: "response.create" }));
+              console.log("✅ tool_response enviado, esperando respuesta hablada...");
+            } catch (err) {
+              openAiWs.send(JSON.stringify({
+                type: "tool_response",
+                tool_response: {
+                  tool_call_id: toolCallId,
+                  output: { error: "Error en consulta_entry" }
+                }
+              }));
+              openAiWs.send(JSON.stringify({ type: "response.create" }));
+              console.error("❌ Error en consulta_entry:", err);
+            }
+          }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       } catch (error) {
         console.error(
           "Error processing OpenAI message:",
