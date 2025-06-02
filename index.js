@@ -21,18 +21,11 @@ fastify.register(fastifyFormBody);
 fastify.register(fastifyWs);
 
 // Constants
+const SYSTEM_MESSAGE =
+  "Eres el asistente Virtual de la Universidad Virtual del Estado de Guanajuato (UVEG). Al iniciar la conversación, da la bienvenida.\nEstas atendiendo vía telefónica, por lo que tus diálogos y la información que proporciones deben ser breves y concisos\n\nDatos de la universidad:\n- www.uveg.mx\n- Hermenegildo Bustos 129 A Sur Centro, C.P. 36400, Purísima del Rincón, GTO.\nHorario de atención de oficina: 8:00 a 16:00 horas\n\n## Atención ciudadana (Mesa de ayuda)\nmesadeayuda@uveg.edu.mx\n(462) 800 4000\n\n## Carreras Disponibles\nLicenciatura en Marketing Digital\nLicenciatura en Contaduría Pública\nIngeniería en Desarrollo de Software\nLicenciatura en Ciencias del Comportamiento Humano\nLicenciatura en Derecho\nLicenciatura en Pedagogía\nLicenciatura en Administración del Capital Humano\nLicenciatura en Administración de las Finanzas\nLicenciatura en Gestión y Desarrollo Empresarial\nIngeniería en Sistemas Computacionales\nIngeniería en Gestión de Proyectos\nIngeniería Industrial\nIngeniería en Gestión de Tecnologías de Información\n\n# Requisitos\n- Acta de Nacimiento\n- CURP\n- Certificado de término de estudios de Bachillerato\n\n## Detalle de Costos vigentes para 2025 en Carreras Profesionales (todos los precios son en mxn) \n\n- Examen de Ubicación (EXU)*\n(Incluye curso de inducción y una credencial de alumno cuando se complete su inscripción) $489.00\n- Aportación de recuperación por materia (módulo) mensual: $335.00\n- Recursamiento de módulo (materia): $392.00\n- Examen de Recuperación de módulo (materia): $335.00\n- Aportación por estadía profesional: $335.00\n- Examen global: $335.00\n\nNota: Para alumnos extranjeros, las cuotas señaladas en esta tabla son al doble. Tools: cuando te pidan informacion de una entrada, llama la tool consulta_entry";
+
 // const SYSTEM_MESSAGE =
-//   "Eres el asistente Virtual de la Universidad Virtual del Estado de Guanajuato (UVEG). Al iniciar la conversación, da la bienvenida.\nEstas atendiendo vía telefónica, por lo que tus diálogos y la información que proporciones deben ser breves y concisos\n\nDatos de la universidad:\n- www.uveg.mx\n- Hermenegildo Bustos 129 A Sur Centro, C.P. 36400, Purísima del Rincón, GTO.\nHorario de atención de oficina: 8:00 a 16:00 horas\n\n## Atención ciudadana (Mesa de ayuda)\nmesadeayuda@uveg.edu.mx\n(462) 800 4000\n\n## Carreras Disponibles\nLicenciatura en Marketing Digital\nLicenciatura en Contaduría Pública\nIngeniería en Desarrollo de Software\nLicenciatura en Ciencias del Comportamiento Humano\nLicenciatura en Derecho\nLicenciatura en Pedagogía\nLicenciatura en Administración del Capital Humano\nLicenciatura en Administración de las Finanzas\nLicenciatura en Gestión y Desarrollo Empresarial\nIngeniería en Sistemas Computacionales\nIngeniería en Gestión de Proyectos\nIngeniería Industrial\nIngeniería en Gestión de Tecnologías de Información\n\n# Requisitos\n- Acta de Nacimiento\n- CURP\n- Certificado de término de estudios de Bachillerato\n\n## Detalle de Costos vigentes para 2025 en Carreras Profesionales (todos los precios son en mxn) \n\n- Examen de Ubicación (EXU)*\n(Incluye curso de inducción y una credencial de alumno cuando se complete su inscripción) $489.00\n- Aportación de recuperación por materia (módulo) mensual: $335.00\n- Recursamiento de módulo (materia): $392.00\n- Examen de Recuperación de módulo (materia): $335.00\n- Aportación por estadía profesional: $335.00\n- Examen global: $335.00\n\nNota: Para alumnos extranjeros, las cuotas señaladas en esta tabla son al doble. Tools: cuando te pidan informacion de una entrada, llama la tool consulta_entry";
-
-
-
-const SYSTEM_MESSAGE = "Si te preguntan por información de una entrada, llama la tool consulta_entry.";
-
-
-
-
-
-
+//   "Si te preguntan por información de una entrada, llama la tool consulta_entry.";
 
 const VOICE = "coral";
 const PORT = process.env.PORT || 5050; // Allow dynamic port assignment
@@ -90,9 +83,9 @@ fastify.register(async (fastify) => {
     let responseStartTimestampTwilio = null;
 
     const openAiWs = new WebSocket(
-     // "wss://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview-2024-12-17",
-     "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17",
-     {
+      // "wss://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview-2024-12-17",
+      "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17",
+      {
         headers: {
           Authorization: `Bearer ${OPENAI_API_KEY}`,
           "OpenAI-Beta": "realtime=v1",
@@ -146,33 +139,25 @@ fastify.register(async (fastify) => {
           //   }
           // ]
 
-
           tools: [
             {
               name: "consulta_entry",
               type: "function",
               description: "Obtiene la información de entradas de pagina",
-           //   strict: false,
+              //   strict: false,
               parameters: {
                 type: "object",
                 properties: {
                   id: {
                     type: "integer",
-                    description: "el id de la entrada a consultar"
-                  }
+                    description: "el id de la entrada a consultar",
+                  },
                 },
-                required: ["id"]
-              }
-            }
+                required: ["id"],
+              },
+            },
           ],
-          "tool_choice": "auto",
-
-
-
-
-
-
-          
+          tool_choice: "auto",
         },
       };
 
@@ -180,7 +165,7 @@ fastify.register(async (fastify) => {
       openAiWs.send(JSON.stringify(sessionUpdate));
 
       // Uncomment the following line to have AI speak first:
-    //  sendInitialConversationItem();
+      sendInitialConversationItem();
     };
 
     // Send initial conversation item if AI talks first
@@ -264,25 +249,19 @@ fastify.register(async (fastify) => {
       console.log("Connected to the OpenAI Realtime API");
       setTimeout(initializeSession, 100);
 
-
-      setTimeout(() => {
-        openAiWs.send(JSON.stringify({
-          type: "conversation.item.create",
-          item: {
-            type: "message",
-            role: "user",
-            content: [
-              { type: "input_text", text: "Llama a la función consulta_entry con id 123." }
-            ]
-          }
-        }));
-        openAiWs.send(JSON.stringify({ type: "response.create" }));
-      }, 300);
-
-
-
-
-
+      // setTimeout(() => {
+      //   openAiWs.send(JSON.stringify({
+      //     type: "conversation.item.create",
+      //     item: {
+      //       type: "message",
+      //       role: "user",
+      //       content: [
+      //         { type: "input_text", text: "Llama a la función consulta_entry con id 123." }
+      //       ]
+      //     }
+      //   }));
+      //   openAiWs.send(JSON.stringify({ type: "response.create" }));
+      // }, 300);
     });
 
     // Listen for messages from the OpenAI WebSocket (and send to Twilio if necessary)
@@ -360,8 +339,6 @@ fastify.register(async (fastify) => {
         //   }
         // }
 
-
-
         if (response.type === "tool_call") {
           console.log("🟢 tool_call recibida:", response);
 
@@ -370,45 +347,37 @@ fastify.register(async (fastify) => {
           if (name === "consulta_entry") {
             try {
               // Simulación: puedes poner await consulta_entry_at(parameters);
-              const result = `La entrada ${parameters.id} es referente a las becas deportivas`; 
-        
-              openAiWs.send(JSON.stringify({
-                type: "tool_response",
-                tool_response: {
-                  tool_call_id: toolCallId,
-                  output: result
-                }
-              }));
-        
+              const result = `La entrada ${parameters.id} es referente a las becas deportivas`;
+
+              openAiWs.send(
+                JSON.stringify({
+                  type: "tool_response",
+                  tool_response: {
+                    tool_call_id: toolCallId,
+                    output: result,
+                  },
+                })
+              );
+
               openAiWs.send(JSON.stringify({ type: "response.create" }));
-              console.log("✅ tool_response enviado, esperando respuesta hablada...");
+              console.log(
+                "✅ tool_response enviado, esperando respuesta hablada..."
+              );
             } catch (err) {
-              openAiWs.send(JSON.stringify({
-                type: "tool_response",
-                tool_response: {
-                  tool_call_id: toolCallId,
-                  output: { error: "Error en consulta_entry" }
-                }
-              }));
+              openAiWs.send(
+                JSON.stringify({
+                  type: "tool_response",
+                  tool_response: {
+                    tool_call_id: toolCallId,
+                    output: { error: "Error en consulta_entry" },
+                  },
+                })
+              );
               openAiWs.send(JSON.stringify({ type: "response.create" }));
               console.error("❌ Error en consulta_entry:", err);
             }
           }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       } catch (error) {
         console.error(
           "Error processing OpenAI message:",
