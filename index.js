@@ -140,15 +140,15 @@ fastify.register(async (fastify) => {
               name: "consulta_entry",
               type: "function",
               description: "Obtiene la información de entradas de pagina",
-              "parameters": {
-                "type": "object",
+              parameters: {
+                type: "object",
+                properties: {
                   id: {
-                    type: "string",
+                    type: "integer",
                     description: "el id de la entrada a consultar"
-                  },
-                
-                required: ["id"],
-                "additionalProperties": false
+                  }
+                },
+                required: ["id"]
               }
             }
           ]
