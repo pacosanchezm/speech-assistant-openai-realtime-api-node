@@ -118,19 +118,19 @@ fastify.register(async (fastify) => {
           //   },
           // ]
 
-          tools:[
+          tools: [
             {
-                "name": "get_weather",
-                "type": "function",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "location": {"type": "string"},
-                        "unit": {"type": "string", "enum": ["c", "f"]},
-                    },
-                    "required": ["location", "unit"],
-                    "additionalProperties": False,
+              "name": "get_weather",
+              // "type": "function", // opcional
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "location": { "type": "string" },
+                  "unit": { "type": "string", "enum": ["c", "f"] }
                 },
+                "required": ["location", "unit"],
+                "additionalProperties": false
+              }
             }
           ]
 
