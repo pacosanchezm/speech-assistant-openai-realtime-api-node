@@ -138,6 +138,7 @@ fastify.register(async (fastify) => {
           tools: [
             {
               name: "consulta_entry",
+              type: "function",
               description: "Obtiene la información de entradas de pagina",
               "parameters": {
                 "type": "object",
