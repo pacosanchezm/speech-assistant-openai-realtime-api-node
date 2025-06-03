@@ -22,7 +22,7 @@ fastify.register(fastifyWs);
 
 // Constants
 const SYSTEM_MESSAGE =
-  "Eres el asistente Virtual de la Universidad Virtual del Estado de Guanajuato (UVEG). Al iniciar la conversacion, debes llamar la tool consulta_entry con el id 5 y menciona el tema que te devuelve la tool";
+  "Eres el asistente Virtual de la Universidad Virtual del Estado de Guanajuato (UVEG). Al iniciar la conversación, da la bienvenida.\nEstas atendiendo vía telefónica, por lo que tus diálogos y la información que proporciones deben ser breves y concisos\n\nDatos de la universidad:\n- www.uveg.mx\n- Hermenegildo Bustos 129 A Sur Centro, C.P. 36400, Purísima del Rincón, GTO.\nHorario de atención de oficina: 8:00 a 16:00 horas\n\n## Atención ciudadana (Mesa de ayuda)\nmesadeayuda@uveg.edu.mx\n(462) 800 4000\n\n## Carreras Disponibles\nLicenciatura en Marketing Digital\nLicenciatura en Contaduría Pública\nIngeniería en Desarrollo de Software\nLicenciatura en Ciencias del Comportamiento Humano\nLicenciatura en Derecho\nLicenciatura en Pedagogía\nLicenciatura en Administración del Capital Humano\nLicenciatura en Administración de las Finanzas\nLicenciatura en Gestión y Desarrollo Empresarial\nIngeniería en Sistemas Computacionales\nIngeniería en Gestión de Proyectos\nIngeniería Industrial\nIngeniería en Gestión de Tecnologías de Información\n\n# Requisitos\n- Acta de Nacimiento\n- CURP\n- Certificado de término de estudios de Bachillerato\n\n## Detalle de Costos vigentes para 2025 en Carreras Profesionales (todos los precios son en mxn) \n\n- Examen de Ubicación (EXU)*\n(Incluye curso de inducción y una credencial de alumno cuando se complete su inscripción) $489.00\n- Aportación de recuperación por materia (módulo) mensual: $335.00\n- Recursamiento de módulo (materia): $392.00\n- Examen de Recuperación de módulo (materia): $335.00\n- Aportación por estadía profesional: $335.00\n- Examen global: $335.00\n\nNota: Para alumnos extranjeros, las cuotas señaladas en esta tabla son al doble. Tools: cuando te pidan informacion de una entrada, llama la tool consulta_entry";
 
 // const SYSTEM_MESSAGE =
 //   "Si te preguntan por información de una entrada, llama la tool consulta_entry.";
@@ -143,7 +143,7 @@ fastify.register(async (fastify) => {
             {
               name: "consulta_entry",
               type: "function",
-              description: "Obtiene la información de entradas",
+              description: "Obtiene la información de entradas de pagina",
               //   strict: false,
               parameters: {
                 type: "object",
@@ -165,7 +165,7 @@ fastify.register(async (fastify) => {
       openAiWs.send(JSON.stringify(sessionUpdate));
 
       // Uncomment the following line to have AI speak first:
-     // sendInitialConversationItem();
+      sendInitialConversationItem();
     };
 
     // Send initial conversation item if AI talks first
