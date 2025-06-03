@@ -157,7 +157,7 @@ fastify.register(async (fastify) => {
               },
             },
           ],
-          tool_choice: "required",
+          tool_choice: "auto",
         },
       };
 
