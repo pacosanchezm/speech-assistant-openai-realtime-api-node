@@ -141,20 +141,18 @@ fastify.register(async (fastify) => {
 
           tools: [
             {
+              name: "consulta_entry",
               type: "function",
-              function: {
-                name: "consulta_entry",
-                description: "Obtiene la información de entradas",
-                parameters: {
-                  type: "object",
-                  properties: {
-                    id: {
-                      type: "integer",
-                      description: "el id de la entrada a consultar",
-                    },
+              description: "Obtiene la información de entradas",
+              parameters: {
+                type: "object",
+                properties: {
+                  id: {
+                    type: "integer",
+                    description: "el id de la entrada a consultar",
                   },
-                  required: ["id"],
                 },
+                required: ["id"],
               },
             },
           ],
