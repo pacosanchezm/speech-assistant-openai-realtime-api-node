@@ -139,24 +139,24 @@ fastify.register(async (fastify) => {
           //   }
           // ]
 
-          tools: [
-            {
-              name: "consulta_entry",
-              type: "function",
-              description: "Obtiene la información de entradas",
-              //   strict: false,
-              parameters: {
-                type: "object",
-                properties: {
-                  id: {
-                    type: "integer",
-                    description: "el id de la entrada a consultar",
-                  },
+        tools: [
+          {
+            name: "consulta_entry",
+            type: "function",
+            description: "Obtiene la información de entradas",
+            //   strict: false,
+            parameters: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "integer",
+                  description: "el id de la entrada a consultar",
                 },
-                required: ["id"],
               },
+              required: ["id"],
             },
-          ],
+          },
+        ],
           tool_choice: "auto",
         },
       };
