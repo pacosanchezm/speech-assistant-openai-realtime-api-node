@@ -145,7 +145,6 @@ fastify.register(async (fastify) => {
               function: {
                 name: "consulta_entry",
                 description: "Obtiene la información de entradas",
-                //   strict: false,
                 parameters: {
                   type: "object",
                   properties: {
