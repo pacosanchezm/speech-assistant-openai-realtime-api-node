@@ -84,7 +84,8 @@ fastify.register(async (fastify) => {
 
     const openAiWs = new WebSocket(
       // "wss://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview-2024-12-17",
-      "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17",
+      // "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17",
+      "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2025-06-03      ",
       {
         headers: {
           Authorization: `Bearer ${OPENAI_API_KEY}`,
@@ -166,7 +167,7 @@ fastify.register(async (fastify) => {
       openAiWs.send(JSON.stringify(sessionUpdate));
 
       // Uncomment the following line to have AI speak first:
-     // sendInitialConversationItem();
+      sendInitialConversationItem();
     };
 
     // Send initial conversation item if AI talks first
