@@ -1,5 +1,7 @@
 import Fastify from "fastify";
 import fastifyWs from "@fastify/websocket";
+import fastifyFormBody from "@fastify/formbody";
+
 import dotenv from "dotenv";
 import WebSocket from "ws";
 
@@ -13,6 +15,7 @@ const SYSTEM_MESSAGE = "Eres el asistente Virtual de la Universidad Virtual del 
 
 // --- Fastify init
 const fastify = Fastify();
+fastify.register(fastifyFormBody);
 fastify.register(fastifyWs);
 
 fastify.get("/", async (req, rep) => {
@@ -21,7 +24,7 @@ fastify.get("/", async (req, rep) => {
 
 // --- Twilio entrypoint: devuelve el XML para conectar el stream
 fastify.all("/incoming-call", async (req, rep) => {
-  const host = req.headers["host"];
+  const host = req.headers.host;
   rep.type("text/xml").send(`
     <Response>
       <Connect>
