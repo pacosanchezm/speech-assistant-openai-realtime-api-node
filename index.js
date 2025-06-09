@@ -165,11 +165,11 @@ fastify.register(async (fastify) => {
       openAiWs.send(JSON.stringify(sessionUpdate));
 
       // Uncomment the following line to have AI speak first:
-      sendInitialConversationItem();
+     // sendInitialConversationItem();
     };
 
     // Send initial conversation item if AI talks first
-    const sendInitialConversationItem = () => {
+    const sendInitialConversationItembk = () => {
       const initialConversationItem = {
         type: "conversation.item.create",
         item: {
@@ -192,6 +192,30 @@ fastify.register(async (fastify) => {
       openAiWs.send(JSON.stringify(initialConversationItem));
       openAiWs.send(JSON.stringify({ type: "response.create" }));
     };
+
+
+
+    const sendInitialConversationItem = () => {
+      const initialConversationItem = {
+        type: "conversation.item.create",
+        item: {
+          type: "message",
+          role: "user",
+          content: [
+            { type: "input_text", text: "Hola" }
+          ],
+        },
+      };
+      openAiWs.send(JSON.stringify(initialConversationItem));
+      openAiWs.send(JSON.stringify({ type: "response.create" }));
+    };
+
+
+
+
+
+
+
 
     // Handle interruption when the caller's speech starts
     const handleSpeechStartedEvent = () => {
@@ -246,8 +270,16 @@ fastify.register(async (fastify) => {
 
     // Open event for OpenAI WebSocket
     openAiWs.on("open", () => {
+
       console.log("Connected to the OpenAI Realtime API");
-      setTimeout(initializeSession, 100);
+      setTimeout(initializeSession, 1000);
+    
+      // Lanza el saludo inicial medio segundo después de la sesión
+      setTimeout(() => {
+        sendInitialConversationItem();
+      }, 1500); // 1 seg para session, 0.5 seg para user
+
+
 
       // setTimeout(() => {
       //   openAiWs.send(JSON.stringify({
